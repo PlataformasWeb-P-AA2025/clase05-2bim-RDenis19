@@ -109,7 +109,12 @@ def editar_estudiante(request, id):
 
     return render(request, 'editarEstudiante.html', diccionario)
 
-
+# @login_required
+# únicamente los usuarios que han iniciado sesión puedan
+# acceder a esta vista. Así evito que personas no autenticadas
+# vean, creen o modifiquen información. 
+@login_required
+@permission_required('administrativo.delete_estudiante', raise_exception=True)
 def eliminar_estudiante(request, id):
     """
     """
@@ -124,7 +129,9 @@ def en_grupo(nombre):
         return user.groups.filter(name=nombre).exists()
     return user_passes_test(predicate)
 
+@login_required
 @en_grupo('supervisor')
+@permission_required('administrativo.add_numerotelefonico', raise_exception=True)
 def crear_numero_telefonico(request):
     """
     """
@@ -142,6 +149,8 @@ def crear_numero_telefonico(request):
     return render(request, 'crearNumeroTelefonico.html', diccionario)
 
 
+@login_required
+@permission_required('administrativo.change_numerotelefonico', raise_exception=True)
 def editar_numero_telefonico(request, id):
     """
     """
@@ -158,6 +167,9 @@ def editar_numero_telefonico(request, id):
 
     return render(request, 'crearNumeroTelefonico.html', diccionario)
 
+
+@login_required
+@permission_required('administrativo.add_numerotelefonico', raise_exception=True)
 def crear_numero_telefonico_estudiante(request, id):
     """
     """
